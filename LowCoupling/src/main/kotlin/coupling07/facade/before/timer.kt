@@ -3,9 +3,7 @@ package coupling07.facade.before
 import java.util.*
 
 class DoorTimerTask(private val controller: ElevatorController) : TimerTask() {
-    override fun run() {
-        controller.doorTimeout()
-    }
+    override fun run() = controller.doorTimeout()
 }
 
 class Timer {
@@ -29,7 +27,5 @@ class DoorTimer {
         timer.schedule(task, 1000)
     }
 
-    fun stop() {
-        timer.cancel()
-    }
+    fun stop() = timer.cancel()
 }

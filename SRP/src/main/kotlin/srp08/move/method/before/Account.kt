@@ -16,7 +16,7 @@ package srp08.move.method.before
  * when the bank's customer attempts to spend more money than is available.
  */
 class Account(private val type: AccountType) {
-    private var daysOverdrawn = 0
+    var daysOverdrawn = 0
 
     private fun overdraftCharge(): Double =
         if (type.isPremium) {

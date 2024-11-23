@@ -18,28 +18,30 @@ package dip02.replace.conditional.logic.with.strategy.before
 import dip02.replace.conditional.logic.with.strategy.Item
 import dip02.replace.conditional.logic.with.strategy.ThresholdData
 
-class Sale {
-    var discountCode: Int = NO_DISCOUNT
+class Sale(var discountCode: Int = NO_DISCOUNT) {
     var percentage: Double = 0.0
     var thresholdData: ThresholdData? = null
-    private var total = 0.0
 
     private val items = mutableListOf<Item>()
+    val total get() = items.sumOf { it.subTotal }
 
     fun addItem(item: Item) {
         items.add(item)
-        total += item.subTotal
     }
 
-    fun totalWithDiscount(): Double {
-        if (discountCode == PERCENT_DISCOUNT) {
-            total -= total * percentage
-        } else if (discountCode == THRESHOLD_DISCOUNT) {
-            thresholdData?.let {
-                if (total > it.thresholdAmount) total -= it.discountAmount
-            } ?: throw IllegalStateException("Threshold data is not set")
+    fun totalWithDiscount(): Double = total - getDiscount()
+
+    fun getDiscount(): Double {
+        return when (discountCode) {
+            NO_DISCOUNT -> 0.0
+            PERCENT_DISCOUNT -> total * percentage
+            THRESHOLD_DISCOUNT ->
+                thresholdData?.let {
+                    if (total > it.thresholdAmount) it.discountAmount else 0.0
+                } ?: throw IllegalStateException("Threshold data is not set")
+
+            else -> throw IllegalStateException("Invalid discount code")
         }
-        return total
     }
 
     companion object {

@@ -9,6 +9,8 @@
  */
 package dry01.extract.method.before
 
+data class Order(val amount: Double = 300.0)
+
 class Customer(val name: String) {
     private val orders = mutableListOf<Order>()
 

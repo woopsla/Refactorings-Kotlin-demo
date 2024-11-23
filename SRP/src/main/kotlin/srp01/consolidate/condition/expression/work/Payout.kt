@@ -4,7 +4,7 @@
  *
  * TREATMENT: Consolidate Conditional Expression
  *   -- Combine them into a single conditional expression.
- *   -- It Makes the check clearer.
+ *   -- It makes the check clearer.
  *   -- May continue refactoring with "Extract Method".
  */
 package srp01.consolidate.condition.expression.work

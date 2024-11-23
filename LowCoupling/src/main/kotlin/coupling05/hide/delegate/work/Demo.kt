@@ -13,8 +13,6 @@ class Person(val name: String, var department: Department? = null) {
     override fun toString(): String {
         return "Person(name='$name', department=${department?.name})"
     }
-
-    fun getManager(): Person? = department?.manager
 }
 
 class Department(val name: String, var manager: Person? = null) {
@@ -30,6 +28,6 @@ fun main(args: Array<String>) {
     john.department = department
     val peter = Person("Peter", department)
 
-    val manager = peter.getManager()
+    val manager = peter.department?.manager
     println("Manager of Peter: $manager")
 }

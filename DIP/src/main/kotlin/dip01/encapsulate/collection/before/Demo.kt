@@ -10,10 +10,7 @@
  */
 package dip01.encapsulate.collection.before
 
-import dip01.encapsulate.collection.work.Course
-import dip01.encapsulate.collection.work.Person
-
-class Course(private val name: String, val isAdvanced: Boolean)
+data class Course(private val name: String, val isAdvanced: Boolean)
 
 class Person {
     var courses = mutableSetOf<Course>()
@@ -42,5 +39,6 @@ fun main(args: Array<String>) {
         }
     }
 
-    print("Advanced courses: $count")
+    println("Courses by kent: ${kent.courses}")
+    println("Advanced courses count = $count")
 }

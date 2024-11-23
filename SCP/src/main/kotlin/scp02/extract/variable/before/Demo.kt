@@ -13,14 +13,12 @@ import java.util.*
 
 // discountRate depends on the season of the year
 fun getDiscountRate(month: Int): Float =
-    if (month in 3..5)  // Spring
-        0.2f
-    else if (month in 6..8)  // Summer
-        0.5f
-    else if (month in 9..11)  // Fall
-        0.2f
-    else // Winter
-        0.1f
+    when (month) {
+        in 3..5 -> 0.2f
+        in 6..8 -> 0.5f
+        in 9..11 -> 0.2f
+        else -> 0.1f
+    }
 
 fun main(args: Array<String>) {
     println("Discount Rate: " + getDiscountRate(Scanner(System.`in`).nextInt()))

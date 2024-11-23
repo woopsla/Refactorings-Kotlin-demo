@@ -7,7 +7,6 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 
 class Video(val title: String, val rating: Rating, val priceCode: Int) {
-
     companion object {
         const val REGULAR = 1
         const val NEW_RELEASE = 2
@@ -31,7 +30,6 @@ class Video(val title: String, val rating: Rating, val priceCode: Int) {
                 Rating.TWELVE -> age < 12
                 Rating.FIFTEEN -> age < 15
                 Rating.EIGHTEEN -> age < 18
-                else -> false
             }
         } catch (e: ParseException) {
             e.printStackTrace()

@@ -10,8 +10,10 @@
  */
 package scp08.replace.errorcode.with.exception.work
 
+import kotlin.system.exitProcess
+
 class Demo {
-    private var balance = 0
+    var balance = 50
 
     fun withdraw(amount: Int): Int {
         if (amount > balance) {
@@ -21,4 +23,13 @@ class Demo {
             return 0
         }
     }
+}
+
+fun main() {
+    val demo = Demo()
+    if (demo.withdraw(100) == -1) {
+        println("Withdraw amount exceed balance")
+        exitProcess(1)
+    }
+    println("Balance: ${demo.balance}")
 }

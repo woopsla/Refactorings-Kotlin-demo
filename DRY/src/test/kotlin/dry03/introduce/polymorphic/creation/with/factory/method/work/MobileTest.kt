@@ -5,15 +5,12 @@ import org.junit.jupiter.api.Test
 
 class MobileTest {
     @Test
-    fun should_create_toys() {
-        val seoulMobileFactory = SeoulMobileFactory()
-        val product1 = seoulMobileFactory.produceMobile("Thunder")
+    fun `should create toys from Seoul Factory`() {
+        assertEquals(500.0, SeoulMobileFactory().produceMobile("Thunder").price, 0.0)
+    }
 
-        assertEquals(500.0, product1.price, 0.0)
-
-        val tokyoMobileFactory = TokyoMobileFactory()
-        val product2 = tokyoMobileFactory.of("Plus")
-
-        assertEquals(250.0, product2.price, 0.0)
+    @Test
+    fun `should create toys from Tokyo Factory`() {
+        assertEquals(250.0, TokyoMobileFactory().of("Plus").price, 0.0)
     }
 }

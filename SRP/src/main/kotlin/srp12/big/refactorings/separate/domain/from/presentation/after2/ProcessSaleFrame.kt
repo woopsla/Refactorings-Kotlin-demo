@@ -1,4 +1,4 @@
-package org.scarlet.srp12.big.refactorings.separate.domain.from.presentation.after2
+package srp12.big.refactorings.separate.domain.from.presentation.after2
 
 import srp12.big.refactorings.separate.domain.from.presentation.SpringUtilities
 import java.awt.BorderLayout
@@ -35,59 +35,61 @@ class ProcessSaleFrame(private val saleExecutor: SaleService) : JFrame(), Action
         }
     }
 
+    /**
+     * Create the frame.
+     */
     init {
         defaultCloseOperation = EXIT_ON_CLOSE
         setBounds(100, 100, 500, 500)
-        contentPane = JPanel()
-        contentPane.border = EmptyBorder(5, 5, 5, 5)
-        contentPane.layout = BorderLayout()
+        contentPane = JPanel().apply {
+            border = EmptyBorder(5, 5, 5, 5)
+            layout = BorderLayout()
+            add("North", buildNorthPanel())
+            add("Center", buildCenterPanel())
+            add("South", buildSouthPanel())
+            // Crude way to adjust spacing :-(
+            add("West", JLabel("        "))
+            add("East", JLabel("        "))
+        }
         setContentPane(contentPane)
-
-        contentPane.add("North", buildNorthPanel())
-        contentPane.add("Center", buildCenterPanel())
-        contentPane.add("South", buildSouthPanel())
-        // Crude way to adjust spacing :-(
-        contentPane.add("West", JLabel("        "))
-        contentPane.add("East", JLabel("        "))
     }
 
     private fun buildSouthPanel(): JPanel {
-        val panel = JPanel()
-
         newSaleButton.addActionListener(this)
-        panel.add(newSaleButton)
-
         enterItemButton.addActionListener(this)
-        enterItemButton.isEnabled = false
-        panel.add(enterItemButton)
-
         endSaleButton.addActionListener(this)
-        endSaleButton.isEnabled = false
-        panel.add(endSaleButton)
 
-        return panel
+        return JPanel().apply {
+            add(newSaleButton)
+            add(enterItemButton.apply {
+                isEnabled = false
+            })
+            add(endSaleButton.apply {
+                isEnabled = false
+            })
+        }
     }
 
     private fun buildCenterPanel(): JPanel {
-        val panel = JPanel(SpringLayout())
+        val panel = JPanel(SpringLayout()).apply {
+            add(JLabel("ItemId", JLabel.TRAILING))
+            add(itemId)
 
-        panel.add(JLabel("ItemID", JLabel.TRAILING))
-        panel.add(itemId)
+            add(JLabel("Quantity", JLabel.TRAILING))
+            add(quantity)
 
-        panel.add(JLabel("Quantity", JLabel.TRAILING))
-        panel.add(quantity)
+            add(JLabel("Description", JLabel.TRAILING))
+            add(descriptionField)
 
-        panel.add(JLabel("Description", JLabel.TRAILING))
-        panel.add(descriptionField)
+            add(JLabel("Price", JLabel.TRAILING))
+            add(priceField)
 
-        panel.add(JLabel("Price", JLabel.TRAILING))
-        panel.add(priceField)
+            add(JLabel("SubTotal", JLabel.TRAILING))
+            add(subTotalField)
 
-        panel.add(JLabel("SubTotal", JLabel.TRAILING))
-        panel.add(subTotalField)
-
-        panel.add(JLabel("Total", JLabel.TRAILING))
-        panel.add(totalField)
+            add(JLabel("Total", JLabel.TRAILING))
+            add(totalField)
+        }
 
         // Layout the panel.
         SpringUtilities.makeCompactGrid(
@@ -98,13 +100,12 @@ class ProcessSaleFrame(private val saleExecutor: SaleService) : JFrame(), Action
         return panel
     }
 
-    private fun buildNorthPanel(): JPanel {
-        val panel = JPanel()
-        val label = JLabel("Welcome to Fantastic Market!")
-        label.font = Font("Serif", Font.PLAIN, 20)
-        panel.add(label)
-        return panel
-    }
+    private fun buildNorthPanel(): JPanel =
+        JPanel().apply {
+            add(JLabel("Welcome to Fantastic Market!").apply {
+                font = Font("Serif", Font.PLAIN, 20)
+            })
+        }
 
     private fun resetGUI() {
         itemId.selectedIndex = 0
@@ -118,12 +119,10 @@ class ProcessSaleFrame(private val saleExecutor: SaleService) : JFrame(), Action
     override fun actionPerformed(event: ActionEvent) {
         val action = event.actionCommand
         try {
-            if (action == "New Sale") {
-                makeNewSale()
-            } else if (action == "End Sale") {
-                endSale()
-            } else if (action == "Enter Item") {
-                enterItem()
+            when (action) {
+                "New Sale" -> makeNewSale()
+                "End Sale" -> endSale()
+                "Enter Item" -> enterItem()
             }
         } catch (e: Exception) {
             e.printStackTrace()

@@ -13,14 +13,34 @@ package scp06.introduce.assertions.before
 class Project(var memberExpenseLimit: Double = 1234.0)
 
 class Demo {
-    private lateinit var primaryProject: Project
-    private var expenseLimit: Double = 0.0;
+    var primaryProject: Project? = null
+    var expenseLimit: Double = 0.0;
 
     // should have either expense limit or a primary project
     fun expenseLimit(): Double =
-        if ((expenseLimit != NULL_EXPENSE)) expenseLimit else primaryProject.memberExpenseLimit
+        if ((expenseLimit != NULL_EXPENSE))
+            expenseLimit
+        else
+            primaryProject!!.memberExpenseLimit
 
     companion object {
         private const val NULL_EXPENSE = 0.0
     }
 }
+
+fun main() {
+    val project = Project(1000.0)
+
+    val demo = Demo()
+    demo.expenseLimit = 2000.0
+    println(demo.expenseLimit())
+
+    demo.expenseLimit = 0.0
+    demo.primaryProject = project
+    println(demo.expenseLimit())
+
+    demo.expenseLimit = 0.0
+    demo.primaryProject = null
+    println(demo.expenseLimit())
+}
+

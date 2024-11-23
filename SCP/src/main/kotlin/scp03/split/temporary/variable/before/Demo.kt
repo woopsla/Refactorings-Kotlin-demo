@@ -1,7 +1,7 @@
 /*
- * SMELL: DD-Anomaly (by PMD)
+ * SMELL: DD-Anomaly
  *   -- You have a local variable that is used to store various 
- *      intermediate values inside a method.
+ *      intermediate values inside a method
  *      (except for loop or accumulator variables).
  * 
  * TREATMENT: Split Temporary Variables
@@ -12,9 +12,9 @@
 package scp03.split.temporary.variable.before
 
 fun printInfo(width: Int, height: Int) {
-    var temp = (2 * (width + height)).toDouble()
+    var temp = 2 * (width + height)
     println(temp)
 
-    temp = (width * height).toDouble()
+    temp = width * height
     println(temp)
 }

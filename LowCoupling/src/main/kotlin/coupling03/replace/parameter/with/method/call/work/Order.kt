@@ -11,22 +11,26 @@
  */
 package coupling03.replace.parameter.with.method.call.work
 
-class Order(var quantity: Int, var itemPrice: Int) {
+class Order(val quantity: Int, val itemPrice: Int) {
     fun price(): Double {
         // ...
-        return discountedPrice()
+        val basePrice = getBasePrice()  // Get parameter value from method call
+        val discountLevel = getDiscountLevel() // Get parameter value from method call
+        return discountedPrice(basePrice, discountLevel) // Pass the values as parameters
     }
 
-    private val discountLevel get() = if (quantity > 100) 2 else 1
-    private val basePrice get() = quantity * itemPrice
+    private fun getDiscountLevel() = if (quantity > 100) 2 else 1
 
-    // The method for getting the discount (discountedPrice) is 
-    // currently nearly impossible to use separately from the method 
-    // for getting the price (price), since you must get the 
+    private fun getBasePrice(): Int = quantity * itemPrice
+
+    // The method for getting the discount (discountedPrice) is
+    // currently nearly impossible to use separately from the method
+    // for getting the price (price), since you must get the
     // values of all parameters prior to it.
-    private fun discountedPrice(): Double = if (discountLevel == 2) {
-        basePrice * 0.1
-    } else {
-        basePrice * 0.05
-    }
+    private fun discountedPrice(basePrice: Int, discountLevel: Int): Double =
+        if (discountLevel == 2) {
+            basePrice * 0.1
+        } else {
+            basePrice * 0.05
+        }
 }

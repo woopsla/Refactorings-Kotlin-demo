@@ -10,21 +10,24 @@ package srp09.extractclass.work
 
 class Person(
     val name: String,
-    val age: Int,
-    val phone: Phone,
-    val address: Address,
-    var mailingAddress: Address?
+    var age: Int,
+    var contactInfo: ContactInfo?
 ) {
     // ...
-    constructor(
-        name: String,
-        age: Int,
-        phone: Phone,
-        address: Address
-    ) : this(name, age, phone, address, null)
+    val phone: Phone? = contactInfo?.phone
+    val address: Address? = contactInfo?.address
+    val email: EmailAddress? = contactInfo?.emailAddress
 }
 
 @JvmInline
 value class Phone(val number: String)
 
+@JvmInline
+value class EmailAddress(val email: String)
 data class Address(val street: String, val city: String, val zip: String)
+
+class ContactInfo(
+    var phone: Phone?,
+    var address: Address?,
+    var emailAddress: EmailAddress?
+)

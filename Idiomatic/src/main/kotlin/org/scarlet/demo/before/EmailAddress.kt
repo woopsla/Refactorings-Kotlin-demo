@@ -1,4 +1,4 @@
-package etc.demo1.before
+package org.scarlet.demo.before
 
 data class EmailAddress(
     val username: String,

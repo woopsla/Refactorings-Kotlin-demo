@@ -10,8 +10,8 @@ package coupling06.extract.interfaces.work
 
 class TimeSheet {
     // ...
-    fun charge(employee: Billable, days: Int): Double {
-        val base = (employee.rate * days).toDouble()
+    fun charge(employee: Employee, days: Int): Double {
+        val base = (employee.rate() * days).toDouble()
         return if (employee.hasSpecialSkill()) {
             base * 1.05
         } else {
@@ -20,11 +20,16 @@ class TimeSheet {
     }
 }
 
-class Employee(val name: String, var department: String) : Billable {
-    override val rate: Int = 1
+class Employee(val name: String, var department: String) {
+    fun rate(): Int {
+        // ...
+        return 1;
+    }
 
-    override fun hasSpecialSkill(): Boolean {
+    fun hasSpecialSkill(): Boolean {
         // ...
         return false
     }
+
+    /* Many other methods follows ... */
 }

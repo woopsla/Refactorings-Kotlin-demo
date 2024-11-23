@@ -36,8 +36,8 @@ class Payout {
         }
     }
 
-    private fun normalPayAmount(): Double = 0.0
-    private fun retiredAmount(): Double = 0.0
-    private fun separatedAmount(): Double = 0.0
-    private fun deadAmount(): Double = 0.0
+    private fun normalPayAmount(): Double = TODO()
+    private fun retiredAmount(): Double = TODO()
+    private fun separatedAmount(): Double = TODO()
+    private fun deadAmount(): Double = TODO()
 }

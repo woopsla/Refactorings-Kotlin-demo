@@ -9,24 +9,24 @@ package coupling01.introduce.parameter.`object`.work
 
 import java.time.LocalDate
 
+data class Transaction(val value: Double, val date: LocalDate)
+
 class Account {
     // ...
     private val transactions = mutableListOf<Transaction>()
 
-    fun getFlowBetween(duration: Duration): Double =
-        transactions
-            .filter { duration.contains(it.date) }
-            .sumOf { it.value }
+    fun getFlowBetween(start: LocalDate, end: LocalDate): Double {
+        var result = 0.0
+
+        for (each in transactions) {
+            if (each.date >= start && each.date <= end) {
+                result += each.value
+            }
+        }
+        return result
+    }
 
     fun add(transaction: Transaction) {
         transactions.add(transaction)
     }
 }
-
-data class Transaction(val value: Double, val date: LocalDate)
-
-data class Duration(val start: LocalDate, val end: LocalDate)
-
-fun Duration.contains(
-    date: LocalDate
-) = date in start..end

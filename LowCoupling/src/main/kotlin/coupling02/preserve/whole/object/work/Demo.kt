@@ -20,7 +20,7 @@ class Room {
 		 * for analysis but at any time we may need to check 
 		 * another room parameter, such as humidity.
 		 */
-        return plan.withinRange(this)
+        return plan.withinRange(low, high)
     }
 
     fun highestTemp(): Int = 100 // dummy
@@ -28,8 +28,8 @@ class Room {
 }
 
 class HeatingPlan(private val range: TempRange) {
-    fun withinRange(room: Room): Boolean {
-        return (room.lowestTemp() >= range.low && room.highestTemp() <= range.high)
+    fun withinRange(low: Int, high: Int): Boolean {
+        return (low >= range.low && high <= range.high)
     }
 }
 

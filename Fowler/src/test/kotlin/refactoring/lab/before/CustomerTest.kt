@@ -2,7 +2,6 @@ package refactoring.lab.before
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import refactoring.lab.after.HtmlStatement
 import java.time.LocalDate
 
 class CustomerTest {

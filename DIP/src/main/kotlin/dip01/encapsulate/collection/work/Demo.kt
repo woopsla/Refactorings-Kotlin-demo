@@ -10,34 +10,38 @@
  */
 package dip01.encapsulate.collection.work
 
-class Course(private val name: String, val isAdvanced: Boolean)
+data class Course(private val name: String, val isAdvanced: Boolean)
 
 class Person {
-    var courses = mutableSetOf<Course>()
+    private val _courses = mutableSetOf<Course>()
+    val courses: Set<Course>
+        get() = _courses
+
+    fun addCourse(course: Course) {
+        _courses.add(course)
+    }
+
+    fun removeCourse(course: Course) {
+        _courses.remove(course)
+    }
 }
 
 fun main(args: Array<String>) {
     // Client code
     val kent = Person()
-    val s = mutableSetOf<Course>()
-    s.add(Course("Smalltalk Programming", false))
-    s.add(Course("Appreciating Single Malts", true))
-    kent.courses = s
+    kent.addCourse(Course("Smalltalk Programming", false))
+    kent.addCourse(Course("Appreciating Single Malts", true))
     assert(kent.courses.size == 2)
 
-    kent.courses.add(Course("Refactoring", true))
-    kent.courses.add(Course("Brutal Sarcasm", false))
+    kent.addCourse(Course("Refactoring", true))
+    kent.addCourse(Course("Brutal Sarcasm", false))
     assert(kent.courses.size == 4)
 
-    kent.courses.remove(Course("Refactoring", true))
+    kent.removeCourse(Course("Refactoring", true))
     assert(kent.courses.size == 3)
 
-    var count = 0
-    for (course in kent.courses) {
-        if (course.isAdvanced) {
-            count++
-        }
-    }
+    val count = kent.courses.count { it.isAdvanced }
 
-    print("Advanced courses: $count")
+    println("Courses by kent: ${kent.courses}")
+    println("Advanced courses count = $count")
 }

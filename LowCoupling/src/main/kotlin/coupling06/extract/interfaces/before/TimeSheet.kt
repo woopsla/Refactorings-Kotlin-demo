@@ -30,4 +30,6 @@ class Employee(val name: String, var department: String) {
         // ...
         return false
     }
+
+    /* Many other methods follows ... */
 }

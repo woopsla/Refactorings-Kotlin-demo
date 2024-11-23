@@ -1,4 +1,4 @@
-package org.scarlet.srp12.big.refactorings.separate.domain.from.presentation.after2
+package srp12.big.refactorings.separate.domain.from.presentation.after2
 
 import org.h2.tools.DeleteDbFiles
 import java.sql.*

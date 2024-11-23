@@ -9,6 +9,8 @@ package coupling01.introduce.parameter.`object`.before
 
 import java.time.LocalDate
 
+data class Transaction(val value: Double, val date: LocalDate)
+
 class Account {
     // ...
     private val transactions = mutableListOf<Transaction>()
@@ -28,5 +30,3 @@ class Account {
         transactions.add(transaction)
     }
 }
-
-data class Transaction(val value: Double, val date: LocalDate)
