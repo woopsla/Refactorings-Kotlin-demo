@@ -1,10 +1,6 @@
-package srp14.move.embellishment.to.decorator.work
+package srp15.move.embellishment.to.decorator.work
 
 import java.util.*
-
-interface Writer {
-    fun write(msg: String)
-}
 
 //region Description
 /*
@@ -27,10 +23,10 @@ interface Writer {
  */
 //endregion
 
-class StringWriter(private var isCapitalized: Boolean = false) : Writer {
+class StringWriter(private var isCapitalized: Boolean = false) {
     private val target = StringBuilder()
 
-    override fun write(msg: String) {
+    fun write(msg: String) {
         if (isCapitalized) target.append(msg.uppercase(Locale.getDefault()))
         else target.append(msg)
     }

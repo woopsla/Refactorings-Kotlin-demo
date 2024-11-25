@@ -1,4 +1,4 @@
-package srp14.move.embellishment.to.decorator.work
+package srp15.move.embellishment.to.decorator.work
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

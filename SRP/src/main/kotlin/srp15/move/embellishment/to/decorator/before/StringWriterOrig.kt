@@ -1,12 +1,12 @@
-package srp14.move.embellishment.to.decorator.before
+package srp15.move.embellishment.to.decorator.before
 
 /**
  * What if we want to add more features to the writer, like capitalization?
  */
-class StringWriterOrig() : Writer {
+class StringWriterOrig() {
     private val target = StringBuilder()
 
-    override fun write(msg: String) {
+    fun write(msg: String) {
         target.append(msg)
     }
 
