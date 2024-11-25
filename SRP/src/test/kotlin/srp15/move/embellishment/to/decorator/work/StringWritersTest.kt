@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class StringWritersTest {
-    private lateinit var writer: Writer
+    private lateinit var writer: StringWriter
 
     @Test
     fun should_not_capitalize_if_that_policy_not_set() {
