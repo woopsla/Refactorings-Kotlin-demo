@@ -3,25 +3,28 @@ package courseservice.work
 import courseservice.Course
 import courseservice.UserNotLoggedInException
 
-class CourseService {
-    fun getCoursesByUser(user: User): List<Course?> {
-        var courseList: List<Course> = emptyList()
-        val loggedUser = UserSession.getInstance().getLoggedUser()
-        var isFriend = false
+/**
+ * Do we have to perform integration test instead of unit test?
+ */
+// Long method? Clean code?
+// How many test cases we need to achieve 100% coverage? => Cyclomatic complexity (5)
+open class CourseService(val courseDAO: ICourseDAO) {
+    fun getCoursesByUser(user: User, loggedInUser: User?): List<Course?> {
+        if (loggedInUser == null) throw UserNotLoggedInException()
 
-        if (loggedUser != null) {
-            for (friend in user.friends) {
-                if (friend == loggedUser) {
-                    isFriend = true
-                    break
-                }
-            }
-            if (isFriend) {
-                courseList = CourseDAO.findCoursesByUser(user)
-            }
-            return courseList
+        return if (user.isFriendWith(loggedInUser)) {
+            getCoursesBy(user)
         } else {
-            throw UserNotLoggedInException()
+            emptyList<Course>()
         }
     }
+
+    protected open fun getCoursesBy(user: User): List<Course> =
+//        CourseDAO.findCoursesByUser(user)
+        courseDAO.getCoursesBy(user)
+
+    //    protected open fun getLoggedInUser(): User? =
+
+//    protected open fun getLoggedInUser(): User? =
+//        UserSession.getInstance().getLoggedUser()
 }

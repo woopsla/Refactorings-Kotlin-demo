@@ -4,10 +4,10 @@ import courseservice.Course
 
 class User {
     private val _courses = mutableListOf<Course>()
-    val friends: List<User> get() = _friends
+    val courses: List<Course> get() = _courses
 
     private val _friends = mutableListOf<User>()
-    val courses: List<Course> get() = _courses
+    val friends: List<User> get() = _friends
 
     fun addFriend(user: User) {
         _friends.add(user)
