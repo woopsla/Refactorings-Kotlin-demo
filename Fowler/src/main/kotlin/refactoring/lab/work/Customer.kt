@@ -5,12 +5,16 @@ import java.time.LocalDate
 class Customer(
     val name: String,
     val dateOfBirth: String,
-    val statement: Statement = TextStatement(),
+    private var statement: Statement? = null,
 ) {
+    init {
+        setStatement(statement ?: TextStatement(this))
+    }
+
     val rentals = mutableListOf<Rental>()
     val returnedRentals = mutableListOf<Rental>()
 
-    fun rentVideo(video: Video, rentedOn: LocalDate = LocalDate.now()) {
+    fun rentOf(video: Video, rentedOn: LocalDate = LocalDate.now()) {
         if (isUnderAgeFor(video)) throw CustomerUnderageException
         rentals.add(Rental(video, rentedOn))
     }
@@ -24,55 +28,61 @@ class Customer(
     }
 
     fun isUnderAgeFor(video: Video): Boolean = !video.canBeCheckedOutFor(dateOfBirth)
-    fun statement(): String = TextStatement().statement(this)
+
+    fun setStatement(statement: Statement?) {
+        this.statement = statement ?: TextStatement(this)
+    }
+
+    // SAFETY GUARANTEE: `statement` can never be null
+    fun getStatement(): String = statement!!.getStatement()
 
     fun getTotalCharge(): Double = returnedRentals.sumOf { it.getCharge() }
     fun getFrequentRentalPoints(): Int = returnedRentals.sumOf { it.getFrequentRentalPoint() }
 }
 
-abstract class Statement {
-    fun statement(customer: Customer): String {
+abstract class Statement(protected val customer: Customer) {
+    fun getStatement(): String {
         val result = StringBuilder()
-        writeHeader(customer, result)
-        writeBody(customer, result)
-        writeFooter(customer, result)
+        writeHeader(result)
+        writeBody(result)
+        writeFooter(result)
         return result.toString();
     }
 
-    abstract fun writeHeader(customer: Customer, result: StringBuilder)
-    abstract fun writeBody(customer: Customer, result: StringBuilder)
-    abstract fun writeFooter(customer: Customer, result: StringBuilder)
+    abstract fun writeHeader(result: StringBuilder)
+    abstract fun writeBody(result: StringBuilder)
+    abstract fun writeFooter(result: StringBuilder)
 }
 
-class TextStatement : Statement() {
-    override fun writeHeader(customer: Customer, result: StringBuilder) {
+class TextStatement(customer: Customer) : Statement(customer) {
+    override fun writeHeader(result: StringBuilder) {
         result.append("Rental Record for ${customer.name}\n")
     }
 
-    override fun writeBody(customer: Customer, result: StringBuilder) {
+    override fun writeBody(result: StringBuilder) {
         for (rental in customer.returnedRentals) {
             result.append("\t${rental.video.title}\t${rental.getCharge()}\n");
         }
     }
 
-    override fun writeFooter(customer: Customer, result: StringBuilder) {
+    override fun writeFooter(result: StringBuilder) {
         result.append("Amount owed is ${customer.getTotalCharge()}\n");
         result.append("You earned ${customer.getFrequentRentalPoints()} frequent renter points");
     }
 }
 
-class HtmlStatement : Statement() {
-    override fun writeHeader(customer: Customer, result: StringBuilder) {
+class HtmlStatement(customer: Customer) : Statement(customer) {
+    override fun writeHeader(result: StringBuilder) {
         result.append("<H1>Rentals for ${customer.name}</H1>\n")
     }
 
-    override fun writeBody(customer: Customer, result: StringBuilder) {
+    override fun writeBody(result: StringBuilder) {
         for (rental in customer.returnedRentals) {
             result.append("${rental.video.title}: ${rental.getCharge()}<BR>\n");
         }
     }
 
-    override fun writeFooter(customer: Customer, result: StringBuilder) {
+    override fun writeFooter(result: StringBuilder) {
         result.append("Amount owed is ${customer.getTotalCharge()}<BR>\n");
         result.append("You earned ${customer.getFrequentRentalPoints()} frequent renter points");
     }

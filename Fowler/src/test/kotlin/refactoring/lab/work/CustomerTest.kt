@@ -14,7 +14,7 @@ class CustomerTest {
         // Arrange (Given)
 
         // Act (When)
-        customer.rentVideo(video)
+        customer.rentOf(video)
 
         // Assert (Then)
         assertEquals(1, customer.rentals.size)
@@ -23,7 +23,7 @@ class CustomerTest {
     @Test
     fun `video return should decrement rental count by one`() {
         // Arrange (Given)
-        customer.rentVideo(video)
+        customer.rentOf(video)
 
         // Act (When)
         customer.returnVideo(video.title, LocalDate.now().plusDays(1))
@@ -43,11 +43,11 @@ class CustomerTest {
         """.trimIndent()
 
         // Arrange (Given)
-        customer.rentVideo(video, LocalDate.now())
+        customer.rentOf(video, LocalDate.now())
         customer.returnVideo(video.title, LocalDate.now().plusDays(3))
 
         // Act (When)
-        val actual = customer.statement()
+        val actual = customer.getStatement()
 
         // Assert (Then)
         assertEquals(expected, actual)
@@ -63,11 +63,11 @@ class CustomerTest {
         """.trimIndent()
 
         // Arrange (Given)
-        customer.rentVideo(newVideo, LocalDate.now())
+        customer.rentOf(newVideo, LocalDate.now())
         customer.returnVideo(newVideo.title, LocalDate.now().plusDays(3))
 
         // Act (When)
-        val actual = customer.statement()
+        val actual = customer.getStatement()
 
         // Assert (Then)
         assertEquals(expected, actual)
@@ -81,7 +81,7 @@ class CustomerTest {
         // Assert (Then)
         assertThrows(CustomerUnderageException::class.java) {
             // Act (When)
-            customer.rentVideo(video, LocalDate.of(2024, 11, 27))
+            customer.rentOf(video, LocalDate.of(2024, 11, 27))
         }
     }
 }
