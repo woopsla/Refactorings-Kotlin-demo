@@ -17,11 +17,16 @@ class Demo {
     var expenseLimit: Double = 0.0;
 
     // should have either expense limit or a primary project
-    fun expenseLimit(): Double =
-        if ((expenseLimit != NULL_EXPENSE))
+    fun expenseLimit(): Double {
+        require(expenseLimit != NULL_EXPENSE || primaryProject != null) {
+            "Should have either expense limit or a primary project"
+        }
+
+        return if ((expenseLimit != NULL_EXPENSE))
             expenseLimit
         else
             primaryProject!!.memberExpenseLimit
+    }
 
     companion object {
         private const val NULL_EXPENSE = 0.0

@@ -16,17 +16,15 @@ class Payout {
     var isPartTime: Boolean = false
 
     fun disabilityAmount(): Double {
-        if (seniority < 2) {    // not eligible for disability
+        if (!isEligibleForDisability()) {    // not eligible for disability
             return 0.0
         }
-        if (monthsDisabled > 12) { // not eligible for disability
-            return 0.0
-        }
-        if (isPartTime) { // not eligible for disability
-            return 0.0
-        }
+
         // compute the disability amount
         // ...
         return 1234.0 // dummy
     }
+
+    private fun isEligibleForDisability(): Boolean =
+        seniority >= 2 && monthsDisabled <= 12 && !isPartTime
 }

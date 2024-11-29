@@ -6,30 +6,31 @@ import java.time.LocalDate
 
 class CustomerTest {
     private val customer = Customer("John Doe", "2000-01-01")
-    private val video = Video("The Matrix", Rating.FIFTEEN, Video.REGULAR)
-    private val newVideo = Video("Witch III", Rating.EIGHTEEN, Video.NEW_RELEASE)
+    private val video = Video("The Matrix", Rating.FIFTEEN, PriceCode.REGULAR)
+    private val newVideo = Video("Witch III", Rating.EIGHTEEN, PriceCode.NEW_RELEASE)
 
     @Test
     fun `rent a video should increase rental count by one`() {
         // Arrange (Given)
 
         // Act (When)
-        video.rentFor(customer)
+        customer.rentOf(video)
 
         // Assert (Then)
-        assertEquals(1, customer.rentedVideos.size)
+        assertEquals(1, customer.rentals.size)
     }
 
     @Test
     fun `video return should decrement rental count by one`() {
         // Arrange (Given)
-        video.rentFor(customer)
+        customer.rentOf(video)
 
         // Act (When)
         customer.returnVideo(video.title, LocalDate.now().plusDays(1))
 
         // Assert (Then)
-        assertEquals(0, customer.rentedVideos.size)
+        assertEquals(0, customer.rentals.size)
+        assertEquals(1, customer.returnedRentals.size)
     }
 
     @Test
@@ -42,11 +43,11 @@ class CustomerTest {
         """.trimIndent()
 
         // Arrange (Given)
-        video.rentFor(customer, LocalDate.now())
+        customer.rentOf(video, LocalDate.now())
         customer.returnVideo(video.title, LocalDate.now().plusDays(3))
 
         // Act (When)
-        val actual = customer.statement()
+        val actual = customer.getStatement()
 
         // Assert (Then)
         assertEquals(expected, actual)
@@ -62,11 +63,11 @@ class CustomerTest {
         """.trimIndent()
 
         // Arrange (Given)
-        newVideo.rentFor(customer, LocalDate.now())
+        customer.rentOf(newVideo, LocalDate.now())
         customer.returnVideo(newVideo.title, LocalDate.now().plusDays(3))
 
         // Act (When)
-        val actual = customer.statement()
+        val actual = customer.getStatement()
 
         // Assert (Then)
         assertEquals(expected, actual)
@@ -80,7 +81,7 @@ class CustomerTest {
         // Assert (Then)
         assertThrows(CustomerUnderageException::class.java) {
             // Act (When)
-            video.rentFor(customer, LocalDate.of(2024, 11, 27))
+            customer.rentOf(video, LocalDate.of(2024, 11, 27))
         }
     }
 }

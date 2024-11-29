@@ -11,18 +11,17 @@
  */
 package srp04.replace.temp.with.query.work
 
+// DRY violation ==> WET (We Enjoy Typing, Waste Everyone's Time)
 class Product {
     private var quantity: Int = 3
     private var itemPrice: Double = 0.0
 
     fun price(): Double {
-        val basePrice = quantity * itemPrice // <------------
-        val discountFactor = if (basePrice > 1000) 0.95 else 0.98;
-        return basePrice * discountFactor
+        val discountFactor = if (getBasePrice() > 1000) 0.95 else 0.98;
+        return getBasePrice() * discountFactor
     }
 
-    fun priceForVIP(): Double {
-        val basePrice = quantity * itemPrice // <-------------
-        return basePrice * 0.7
-    }
+    fun priceForVIP(): Double = getBasePrice() * 0.7
+
+    private fun getBasePrice(): Double = quantity * itemPrice
 }

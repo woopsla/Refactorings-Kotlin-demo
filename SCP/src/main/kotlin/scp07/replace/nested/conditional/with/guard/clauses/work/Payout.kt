@@ -23,16 +23,12 @@ class Payout {
         // ...
         return if (isDead) {
             deadAmount()
+        } else if (isSeparated) {
+            separatedAmount()
+        } else if (isRetired) {
+            retiredAmount()
         } else {
-            if (isSeparated) {
-                separatedAmount()
-            } else {
-                if (isRetired) {
-                    retiredAmount()
-                } else {
-                    normalPayAmount()
-                }
-            }
+            normalPayAmount()
         }
     }
 

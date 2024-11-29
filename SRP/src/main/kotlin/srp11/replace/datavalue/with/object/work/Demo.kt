@@ -11,18 +11,14 @@
  */
 package srp11.replace.datavalue.with.`object`.work
 
-class Order(val customer: String) {
+class Order(val customer: Customer) {
+    // ...
+}
+
+class Customer(val name: String) {
     // ...
 }
 
 // Client code, which uses Order class.
-private fun numberOfOrdersFor(orders: List<Order>, customer: String): Int {
-    var result = 0
-
-    for (each in orders) {
-        if (each.customer == customer) {
-            result++
-        }
-    }
-    return result
-}
+private fun numberOfOrdersFor(orders: List<Order>, customer: String): Int =
+    orders.count { it.customer.name == customer }

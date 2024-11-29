@@ -18,15 +18,15 @@ class VideoTests {
         val dateOfBirth = String.format("%s-01-01", age)
 
         val customer = Customer(UNUSED_NAME, dateOfBirth)
-        val video = Video(UNUSED_TITLE, Rating.TWELVE, Video.NEW_RELEASE)
-        video.rentFor(customer, LocalDate.now())
+        val video = Video(UNUSED_TITLE, Rating.TWELVE, PriceCode.NEW_RELEASE)
+        customer.rentOf(video, LocalDate.now())
     }
 
     @Test
     fun `video rented by customer of legal age is added to customers rented videos`() {
         val customer = Customer(UNUSED_NAME, "1964-01-01")
-        val video = Video(UNUSED_TITLE, Rating.TWELVE, Video.NEW_RELEASE)
-        video.rentFor(customer, LocalDate.now())
-        assertTrue(customer.rentedVideos.contains(video))
+        val video = Video(UNUSED_TITLE, Rating.TWELVE, PriceCode.NEW_RELEASE)
+        customer.rentOf(video, LocalDate.now())
+        assertTrue(customer.rentals.map { it.video.title }.contains(video.title))
     }
 }

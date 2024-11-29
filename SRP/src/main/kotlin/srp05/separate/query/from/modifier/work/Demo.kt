@@ -9,15 +9,16 @@
  */
 package srp05.separate.query.from.modifier.work
 
+// CQR (Command Query Responsibility)
+// CQRS (Command Query Responsibility Segregation)
 class Demo {
     private val scores = mutableListOf<Int>()
 
-    fun addAndGetSum(score: Int): Long {
+    fun addScore(score: Int) {
         scores.add(score)
-        var sum: Long = 0
-        for (i in scores) sum += i.toLong()
-        return sum
     }
+
+    fun getSum(): Long = scores.sum().toLong()
 }
 
 fun main() {
@@ -25,7 +26,8 @@ fun main() {
     val demo = Demo()
 
     for (i in 0..9) {
-        val sum = demo.addAndGetSum(i)
+        demo.addScore(i)
+        val sum = demo.getSum()
         println("sum = $sum")
     }
 }

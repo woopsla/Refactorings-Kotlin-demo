@@ -21,18 +21,25 @@ class List<T> {
     }
 
     fun add(element: T) {
-        if (!readOnly) {
-            val newSize = size + 1 // update size
+        if (readOnly) return
 
-            if (newSize > elements.size) { // grow array if capacity exceeds
-                val newElements = arrayOfNulls<Any>(elements.size + 10) as Array<T>
-                for (i in 0 until size) newElements[i] = elements[i]
-                elements = newElements
-            }
-
-            elements[size++] = element // add element
+        if (updateSize() > elements.size) { // grow array if capacity exceeds
+            growCapacity()
         }
+        addElement(element) // add element
     }
+
+    private fun addElement(element: T) {
+        elements[size++] = element
+    }
+
+    private fun growCapacity() {
+        val newElements = arrayOfNulls<Any>(elements.size + 10) as Array<T>
+        for (i in 0 until size) newElements[i] = elements[i]
+        elements = newElements
+    }
+
+    private fun updateSize(): Int = size + 1
 
     val capacity: Int
         get() = elements.size
