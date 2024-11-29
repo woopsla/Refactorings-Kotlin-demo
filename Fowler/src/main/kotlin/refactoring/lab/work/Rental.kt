@@ -6,4 +6,10 @@ class Rental(val video: Video, val occurredOn: LocalDate, var daysRented: Int = 
     fun returnVideo(on: LocalDate) {
         daysRented = (on.toEpochDay() - occurredOn.toEpochDay()).toInt()
     }
+
+    fun getCharge(): Double = video.getCharge(daysRented)
+
+    fun getFrequentRentalPoint(): Int = video.getFrequentRentalPoint(daysRented)
 }
+
+

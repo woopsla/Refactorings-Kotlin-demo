@@ -23,13 +23,46 @@ import java.util.*
  */
 //endregion
 
-class StringWriter(private var isCapitalized: Boolean = false) {
+// SAM, Functional Interface
+fun interface Writer {
+    fun write(msg: String)
+}
+
+open class StringWriter : Writer {
     private val target = StringBuilder()
 
-    fun write(msg: String) {
-        if (isCapitalized) target.append(msg.uppercase(Locale.getDefault()))
-        else target.append(msg)
+    override fun write(msg: String) {
+        target.append(msg)
     }
 
     override fun toString(): String = target.toString()
 }
+
+class CapStringWriter(val delegate: Writer) : Writer {
+    override fun write(msg: String) {
+        delegate.write(msg.uppercase(Locale.getDefault()))
+    }
+
+    override fun toString(): String {
+        return delegate.toString()
+    }
+}
+
+class CensoredStringWriter(val delegate: Writer) : Writer {
+    override fun write(msg: String) {
+        delegate.write(msg.replace("Kotlin", "xxxxxx"))
+    }
+
+    override fun toString(): String {
+        return delegate.toString()
+    }
+}
+
+//val stringWriter: Writer = Writer { it }
+fun stringWriter(buf: StringBuilder): Writer = Writer { buf.append(it) }
+
+fun Writer.capWriter(): Writer =
+    Writer { write(it.uppercase(Locale.getDefault())) }
+
+fun Writer.censorWriter(): Writer =
+    Writer { write(it.replace("Kotlin", "xxxxxx")) }

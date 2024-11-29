@@ -10,6 +10,8 @@
  */
 package scp05.replace.magicnumber.with.constant.work
 
+private const val GRAVITATIONAL_CONSTANT = 9.81
+
 fun potentialEnergy(mass: Double, height: Double): Double {
-    return mass * height * 9.81 // Gravitational Constant
+    return mass * height * GRAVITATIONAL_CONSTANT // Gravitational Constant
 }

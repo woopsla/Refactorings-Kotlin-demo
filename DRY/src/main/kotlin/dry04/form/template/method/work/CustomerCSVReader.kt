@@ -10,18 +10,8 @@ package dry04.form.template.method.work
 import dry04.form.template.method.Customer
 import java.io.BufferedReader
 
-class CustomerCSVReader {
-    fun getAll(bufferedReader: BufferedReader): Set<Customer> {
-        val returnSet = mutableSetOf<Customer>()
-        bufferedReader.use { reader ->
-            var line = reader.readLine()
-            while (line != null && line.trim { it <= ' ' } != "") {
-                val tokens = line.split("\\s*,\\s*".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                val customer: Customer = Customer(tokens[0], tokens[1].toInt(), tokens[2], tokens[3])
-                returnSet.add(customer)
-                line = reader.readLine()
-            }
-        }
-        return returnSet
-    }
+@Suppress("UNCHECKED_CAST")
+class CustomerCSVReader : CsvReader<Customer>() {
+    override fun <T> createProduct(tokens: Array<String>): T =
+        Customer(tokens[0], tokens[1].toInt(), tokens[2], tokens[3]) as T
 }

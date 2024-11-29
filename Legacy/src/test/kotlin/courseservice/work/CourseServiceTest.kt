@@ -2,27 +2,18 @@ package courseservice.work
 
 import courseservice.Course
 import courseservice.UserNotLoggedInException
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-// SOLID, KISS, YAGNI, DRY, Tell, Don't Ask,...
 class CourseServiceTest {
     // SUT (System Under Test)
     lateinit var courseService: CourseService
-
-//    private var returnedUser: User? = GUEST
 
     @BeforeEach // Test Fixture
     fun setup() {
 //        courseDao = ICourseDAO { user: User -> user.courses }
         courseService = CourseService { user: User -> user.courses }
-    }
-
-    @AfterEach
-    fun tearDown() {
-        // ...
     }
 
     @Test
@@ -44,8 +35,6 @@ class CourseServiceTest {
             .withFriends(ANOTHER_USER)
             .build()
 
-//        returnedUser = MEMBER // logged in user
-
         // Act (When)
         val courses =
             courseService.getCoursesByUser(user, MEMBER)
@@ -58,20 +47,11 @@ class CourseServiceTest {
     fun `should return non empty list if they are friends`() {
         // Arrange (Given)
         // Fluent API
-//        var user = User().apply {
-//            addCourse(REFACTORING)
-//            addCourse(DESIGN_PATTERN)
-//            addFriend(ANOTHER_USER)
-//            addFriend(MEMBER)
-//        }
-
         // Builder Pattern
         var user = UserBuilder.of()
             .withCourses(REFACTORING, DESIGN_PATTERN)
             .withFriends(ANOTHER_USER, MEMBER)
             .build()
-
-//        returnedUser = MEMBER // logged in user
 
         // Act (When)
         val courses =
@@ -89,13 +69,6 @@ class CourseServiceTest {
         val MEMBER: User = User()
         val ANOTHER_USER: User = User()
     }
-
-//    inner class MockCourseService : CourseService() {
-////        override fun getLoggedInUser(): User? = returnedUser
-//
-////        override fun getCoursesBy(user: User): List<Course> =
-////            user.courses
-//    }
 }
 
 class UserBuilder {
@@ -116,15 +89,21 @@ class UserBuilder {
         return this
     }
 
-//    fun build(): User =
-//        User().also { user ->
-//            this@UserBuilder.courses.forEach { user.addCourse(it) } // method reference
-//            this@UserBuilder.friends.forEach { user.addFriend(it) }
-//        }
+//    fun build(): User {
+//        val user = User()
+//        courses.forEach { user.addCourse(it) }
+//        friends.forEach { user.addFriend(it) }
+//        return user
+//    }
 
-    fun build(): User = User().apply {
-        this@UserBuilder.courses.forEach(::addCourse) // method reference
-        this@UserBuilder.friends.forEach(::addFriend)
-    }
+    fun build(): User =
+        User().also { user ->
+            courses.forEach(user::addCourse) // method reference, bound callable reference
+            friends.forEach(user::addFriend)
+        }
+
+//    fun build(): User = User().apply {
+//        this@UserBuilder.courses.forEach(this::addCourse) // method reference
+//        this@UserBuilder.friends.forEach(this::addFriend)
+//    }
 }
-

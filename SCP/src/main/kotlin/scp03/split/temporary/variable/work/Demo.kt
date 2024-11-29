@@ -18,3 +18,4 @@ fun printInfo(width: Int, height: Int) {
     val area = width * height
     println(area)
 }
+

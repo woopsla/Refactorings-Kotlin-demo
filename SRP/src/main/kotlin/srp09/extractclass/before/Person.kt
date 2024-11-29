@@ -13,9 +13,10 @@ class Person(
     var age: Int,
     var phone: Phone?,
     var address: Address?,
-    var emailAddress: EmailAddress?
+    var emailAddress: EmailAddress?,
 )
 
+// Wrapper type, Tiny type
 @JvmInline
 value class Phone(val number: String)
 

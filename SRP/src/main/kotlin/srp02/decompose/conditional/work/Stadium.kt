@@ -19,15 +19,16 @@ class Stadium {
     private var winterRate: Double = 0.2
     private var winterServiceCharge: Double = 2.0
 
-    fun getTicketPrice(date: LocalDate, quantity: Int): Double {
-        val charge =
-            if (date.isBefore(SUMMER_START) || date.isAfter(SUMMER_END)) { // not summer
-                quantity * winterRate + winterServiceCharge
-            } else {
-                quantity * summerRate
-            }
-        return charge
-    }
+    fun getTicketPrice(date: LocalDate, quantity: Int): Double =
+        if (isSummer(date)) {
+            getSummerCharge(quantity)
+        } else { // not summer
+            getNonSummerCharge(quantity)
+        }
+
+    private fun isSummer(date: LocalDate): Boolean = !date.isBefore(SUMMER_START) && !date.isAfter(SUMMER_END)
+    private fun getSummerCharge(quantity: Int): Double = quantity * summerRate
+    private fun getNonSummerCharge(quantity: Int): Double = quantity * winterRate + winterServiceCharge
 
     companion object {
         private val SUMMER_START: LocalDate = LocalDate.of(2024, 7, 1)

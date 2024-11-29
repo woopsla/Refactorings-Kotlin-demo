@@ -1,22 +1,52 @@
 package srp14.replace.type.code.with.subclasses.work
 
-class Employee(var type: Int) {
-    // ...
-    var monthlySalary: Int = 0
-    var commission: Int = 0
-    var bonus: Int = 0
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
-    fun payAmount(): Int =
-        when (type) {
-            ENGINEER -> monthlySalary
-            SALESMAN -> monthlySalary + commission
-            MANAGER -> monthlySalary + bonus
-            else -> throw RuntimeException("Incorrect Employee Code")
+class EmployeeTest {
+    // SUT
+    private lateinit var employee: Employee
+
+    @Test
+    fun `should return engineer pay amount`() {
+        // Arrange (Given)
+        employee = Employee(Engineer()).apply {
+            monthlySalary = 1000
         }
 
-    companion object {
-        const val ENGINEER: Int = 0
-        const val SALESMAN: Int = 1
-        const val MANAGER: Int = 2
+        // Act (When)
+        val payAmount = employee.payAmount()
+
+        // Assert (Then)
+        assertEquals(1000, payAmount)
     }
+
+    @Test
+    fun `should return saleman pay amount`() {
+        // Arrange (Given)
+        employee = Employee(Salesman(commission = 50)).apply {
+            monthlySalary = 1000
+        }
+
+        // Act (When)
+        val payAmount = employee.payAmount()
+
+        // Assert (Then)
+        assertEquals(1050, payAmount)
+    }
+
+    @Test
+    fun `should return manager pay amount`() {
+        // Arrange (Given)
+        employee = Employee(Manager(bonus = 100)).apply {
+            monthlySalary = 1000
+        }
+
+        // Act (When)
+        val payAmount = employee.payAmount()
+
+        // Assert (Then)
+        assertEquals(1100, payAmount)
+    }
+
 }

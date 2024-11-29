@@ -11,18 +11,9 @@ import dry04.form.template.method.Product
 import java.io.BufferedReader
 import java.math.BigDecimal
 
-class ProductCSVReader {
-    fun getAll(bufferedReader: BufferedReader): Set<Product> {
-        val returnSet = mutableSetOf<Product>()
-        bufferedReader.use { reader ->
-            var line = reader.readLine()
-            while (line != null && line.trim { it <= ' ' } != "") {
-                val tokens = line.split("\\s*,\\s*".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                val product: Product = Product(tokens[0].toInt(), tokens[1], BigDecimal(tokens[2]))
-                returnSet.add(product)
-                line = reader.readLine()
-            }
-        }
-        return returnSet
-    }
+@Suppress("UNCHECKED_CAST")
+class ProductCSVReader : CsvReader<Product>() {
+    override fun <T> createProduct(tokens: Array<String>): T =
+        Product(tokens[0].toInt(), tokens[1], BigDecimal(tokens[2])) as T
 }
+

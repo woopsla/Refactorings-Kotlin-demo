@@ -18,7 +18,7 @@ package srp06.move.accumulation.to.collecting.parameter.work
 class TagNode(
     private val tagName: String,
     private val attributes: String,
-    private val value: String
+    private val value: String,
 ) {
     private val children = mutableListOf<TagNode>()
 
@@ -31,16 +31,33 @@ class TagNode(
     // (2) pass it to the first composed method
     // (3) get the result
     override fun toString(): String {
-        var result = ""
-        result += "<$tagName $attributes>" // write opening Tag
+        var result = StringBuilder()
+        writeTags(result)
+        return result.toString()
+    }
 
-        for (node in children) { // write children tag
-            result += node.toString()
+    private fun writeTags(result: StringBuilder) {
+        writeOpeningTag(result) // write opening Tag
+        writeChildrenTag(result) // write children tag
+        writeValue(result) // write value
+        writeClosingTag(result) // write closing tag
+    }
+
+    private fun writeClosingTag(result: StringBuilder) {
+        result.append("</$tagName>")
+    }
+
+    private fun writeValue(result: StringBuilder) {
+        if (value != "") result.append(value)
+    }
+
+    private fun writeChildrenTag(result: StringBuilder) {
+        for (node in children) {
+            node.writeTags(result)
         }
-        if (value != "") result += value
+    }
 
-        result += "</$tagName>" // write closing tag
-
-        return result
+    private fun writeOpeningTag(result: StringBuilder) {
+        result.append("<$tagName $attributes>")
     }
 }

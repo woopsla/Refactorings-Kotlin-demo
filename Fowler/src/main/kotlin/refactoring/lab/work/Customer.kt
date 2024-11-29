@@ -4,14 +4,14 @@ import java.time.LocalDate
 
 class Customer(
     val name: String,
-    val dateOfBirth: String
+    val dateOfBirth: String,
+    val statement: Statement = TextStatement(),
 ) {
-    private val rentals = mutableListOf<Rental>()
-    private val returnedRentals = mutableListOf<Rental>()
-
-    val rentedVideos: List<Video> get() = rentals.map { it.video }
+    val rentals = mutableListOf<Rental>()
+    val returnedRentals = mutableListOf<Rental>()
 
     fun rentVideo(video: Video, rentedOn: LocalDate = LocalDate.now()) {
+        if (isUnderAgeFor(video)) throw CustomerUnderageException
         rentals.add(Rental(video, rentedOn))
     }
 
@@ -23,61 +23,58 @@ class Customer(
         }
     }
 
-    fun statement(): String {
-        var totalAmount = 0.0;
-        var frequentRenterPoints = 0;
-        var result = "Rental Record for $name\n";
-        for (each in returnedRentals) {
-            var thisAmount = 0.0;
+    fun isUnderAgeFor(video: Video): Boolean = !video.canBeCheckedOutFor(dateOfBirth)
+    fun statement(): String = TextStatement().statement(this)
 
-            //determine amounts for each line
-            when (each.video.priceCode) {
-                Video.REGULAR -> {
-                    thisAmount += 2;
-                    if (each.daysRented > 2)
-                        thisAmount += (each.daysRented - 2) * 1.5;
-                }
+    fun getTotalCharge(): Double = returnedRentals.sumOf { it.getCharge() }
+    fun getFrequentRentalPoints(): Int = returnedRentals.sumOf { it.getFrequentRentalPoint() }
+}
 
-                Video.NEW_RELEASE -> {
-                    thisAmount += each.daysRented * 3;
-                }
-
-                Video.CHILDREN -> {
-                    thisAmount += 1.5;
-                    if (each.daysRented > 3)
-                        thisAmount += (each.daysRented - 3) * 1.5;
-                }
-            }
-
-            // add frequent renter points
-            frequentRenterPoints++;
-
-            // add bonus for a two day new release rental
-            if ((each.video.priceCode == Video.NEW_RELEASE) && each.daysRented > 1)
-                frequentRenterPoints++;
-
-            //show figures for this rental
-            result += "\t${each.video.title}\t$thisAmount\n";
-            totalAmount += thisAmount;
-        }
-
-        //add footer lines
-        result += "Amount owed is $totalAmount\n";
-        result += "You earned $frequentRenterPoints frequent renter points";
-        return result;
+abstract class Statement {
+    fun statement(customer: Customer): String {
+        val result = StringBuilder()
+        writeHeader(customer, result)
+        writeBody(customer, result)
+        writeFooter(customer, result)
+        return result.toString();
     }
 
-//    fun htmlStatement(): String {
-//        var result = "<H1>Rentals for <EM>$name</EM></H1><P>\n";
-//
-//        for (rental in returnedRentals) {
-//            //show figures for each rental
-//            result += "${rental.video.title}: ${rental.getCharge()}<BR>\n";
-//        }
-//
-//        //add footer lines
-//        result += "<P>You owe <EM>${getTotalCharge()}</EM><P>\n";
-//        result += "On this rental you earned <EM>${getTotalPoints()}</EM> frequent renter points<P>";
-//        return result;
-//    }
+    abstract fun writeHeader(customer: Customer, result: StringBuilder)
+    abstract fun writeBody(customer: Customer, result: StringBuilder)
+    abstract fun writeFooter(customer: Customer, result: StringBuilder)
 }
+
+class TextStatement : Statement() {
+    override fun writeHeader(customer: Customer, result: StringBuilder) {
+        result.append("Rental Record for ${customer.name}\n")
+    }
+
+    override fun writeBody(customer: Customer, result: StringBuilder) {
+        for (rental in customer.returnedRentals) {
+            result.append("\t${rental.video.title}\t${rental.getCharge()}\n");
+        }
+    }
+
+    override fun writeFooter(customer: Customer, result: StringBuilder) {
+        result.append("Amount owed is ${customer.getTotalCharge()}\n");
+        result.append("You earned ${customer.getFrequentRentalPoints()} frequent renter points");
+    }
+}
+
+class HtmlStatement : Statement() {
+    override fun writeHeader(customer: Customer, result: StringBuilder) {
+        result.append("<H1>Rentals for ${customer.name}</H1>\n")
+    }
+
+    override fun writeBody(customer: Customer, result: StringBuilder) {
+        for (rental in customer.returnedRentals) {
+            result.append("${rental.video.title}: ${rental.getCharge()}<BR>\n");
+        }
+    }
+
+    override fun writeFooter(customer: Customer, result: StringBuilder) {
+        result.append("Amount owed is ${customer.getTotalCharge()}<BR>\n");
+        result.append("You earned ${customer.getFrequentRentalPoints()} frequent renter points");
+    }
+}
+

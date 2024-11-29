@@ -19,13 +19,7 @@ class Account(private val type: AccountType) {
     private var daysOverdrawn = 0
 
     private fun overdraftCharge(): Double =
-        if (type.isPremium) {
-            if (daysOverdrawn > 7)
-                10.0 + (daysOverdrawn - 7) * 0.85
-            else 10.0
-        } else {
-            daysOverdrawn * 1.75
-        }
+        type.overdraftCharge(daysOverdrawn)
 
     fun bankCharge(): Double =
         if (daysOverdrawn > 0) {
@@ -35,4 +29,13 @@ class Account(private val type: AccountType) {
         }
 }
 
-class AccountType(val isPremium: Boolean = false)
+class AccountType(val isPremium: Boolean = false) {
+    fun overdraftCharge(daysOverdrawn: Int): Double =
+        if (isPremium) {
+            if (daysOverdrawn > 7)
+                10.0 + (daysOverdrawn - 7) * 0.85
+            else 10.0
+        } else {
+            daysOverdrawn * 1.75
+        }
+}

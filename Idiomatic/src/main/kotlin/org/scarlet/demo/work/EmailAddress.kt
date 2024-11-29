@@ -2,24 +2,27 @@ package org.scarlet.demo.work
 
 data class EmailAddress(
     val username: String,
-    val domain: String
+    val domain: String,
 ) {
-    override fun toString(): String = "${username}@${domain}"
+    override fun toString(): String {
+        return "${username}@${domain}"
+    }
 
     companion object {
-        @JvmStatic
         fun parse(value: String): EmailAddress =
-            value.separate('@').let { (username, domain) ->
-                EmailAddress(username, domain)
+            getPair(value, '@').let { (name, domain) ->
+                EmailAddress(name, domain)
+            }
+
+        private fun getPair(value: String, separator: Char): Pair<String, String> =
+            value.lastIndexOf(separator).let {
+                require(it in 1..<value.length - 1) {
+                    "Email address must be two parts separated by 'separator'"
+                }
+                Pair(
+                    value.substring(0, it),
+                    value.substring(it + 1)
+                )
             }
     }
-
 }
-
-private fun String.separate(sep: Char): Pair<String, String> =
-    lastIndexOf(sep).let { atIndex ->
-        require(atIndex in 1..<length - 1) {
-            "Email address must be two parts separated by '@'"
-        }
-        Pair(substring(0, atIndex), substring(atIndex + 1))
-    }

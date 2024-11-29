@@ -12,14 +12,36 @@ package srp07.replace.method.with.method.`object`.work
 class Account {
     // ... Select function body in {} to convert to method object
     fun gamma(inputVal: Int, quantity: Int, yearToDate: Int): Int {
-        val importantValue1 = (inputVal * quantity) + delta()
-        var importantValue2 = (inputVal * yearToDate) + 100
-        if ((yearToDate - importantValue1) > 100) { // Important thing
-            importantValue2 -= 20
+        return Gamma(inputVal, quantity, yearToDate).apply()
+    }
+
+    inner class Gamma(val inputVal: Int, val quantity: Int, val yearToDate: Int) {
+        var importantValue1: Int = 0
+        var importantValue2: Int = 0
+        var importantValue3: Int = 0
+
+        fun apply(): Int {
+            getValue1()
+            getValue2()
+            getValue3()
+            // and so on…
+            return importantValue3 - 2 * importantValue1
         }
-        val importantValue3 = importantValue2 * 7
-        // and so on…
-        return importantValue3 - 2 * importantValue1
+
+        private fun getValue3() {
+            if ((yearToDate - importantValue1) > 100) { // Important thing
+                importantValue2 -= 20
+            }
+            importantValue3 = importantValue2 * 7
+        }
+
+        private fun getValue2() {
+            importantValue2 = (inputVal * yearToDate) + 100
+        }
+
+        private fun getValue1() {
+            importantValue1 = (inputVal * quantity) + delta()
+        }
     }
 
     // ...

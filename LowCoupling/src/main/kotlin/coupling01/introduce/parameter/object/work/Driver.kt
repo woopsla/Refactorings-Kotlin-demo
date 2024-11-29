@@ -15,18 +15,18 @@ class Account {
     // ...
     private val transactions = mutableListOf<Transaction>()
 
-    fun getFlowBetween(start: LocalDate, end: LocalDate): Double {
-        var result = 0.0
-
-        for (each in transactions) {
-            if (each.date >= start && each.date <= end) {
-                result += each.value
-            }
-        }
-        return result
-    }
+    fun getFlowBetween(duration: Duration): Double =
+        transactions
+            .filter { duration.containedIn(it.date) }
+            .sumOf { it.value }
 
     fun add(transaction: Transaction) {
         transactions.add(transaction)
     }
+}
+
+data class Duration(val start: LocalDate, val end: LocalDate) {
+    fun containedIn(
+        date: LocalDate,
+    ): Boolean = date >= start && date <= end
 }

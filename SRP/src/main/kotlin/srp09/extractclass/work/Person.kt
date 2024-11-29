@@ -11,7 +11,7 @@ package srp09.extractclass.work
 class Person(
     val name: String,
     var age: Int,
-    var contactInfo: ContactInfo?
+    private var contactInfo: ContactInfo?,
 ) {
     // ...
     val phone: Phone? = contactInfo?.phone
@@ -29,5 +29,5 @@ data class Address(val street: String, val city: String, val zip: String)
 class ContactInfo(
     var phone: Phone?,
     var address: Address?,
-    var emailAddress: EmailAddress?
+    var emailAddress: EmailAddress?,
 )

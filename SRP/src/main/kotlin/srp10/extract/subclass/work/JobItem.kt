@@ -15,11 +15,8 @@ import srp10.extract.subclass.Employee
  * This class is also responsible for calculating the price
  * client should pay.
  */
-class JobItem(
+abstract class JobItem(
     val quantity: Int,
-    val unitPrice: Int,
-    val isLabor: Boolean,
-    val employee: Employee?
 ) {
     fun totalPrice(): Int = quantity * unitPrice()
 
@@ -38,5 +35,19 @@ class JobItem(
 	 * that subclass. Then we could leave only fixed amounts in
 	 * the original class.
 	 */
-    fun unitPrice(): Int = if (isLabor) employee?.rate ?: 1 else unitPrice
+    abstract fun unitPrice(): Int
+}
+
+class LaborItem(
+    quantity: Int,
+    val employee: Employee?,
+) : JobItem(quantity) {
+    override fun unitPrice(): Int = employee?.rate ?: 1
+}
+
+class PartItem(
+    quantity: Int,
+    val unitPrice: Int,
+) : JobItem(quantity) {
+    override fun unitPrice(): Int = unitPrice
 }
